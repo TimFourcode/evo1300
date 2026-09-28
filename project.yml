@@ -1,0 +1,48 @@
+name: EVO1300
+options:
+  bundleIdPrefix: de.fourcode
+  deploymentTarget:
+    iOS: "17.0"
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    DEVELOPMENT_TEAM: K5DR5W29BY
+targets:
+  EVO1300:
+    type: application
+    platform: iOS
+    sources: [EVO1300]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: de.fourcode.evo1300
+        TARGETED_DEVICE_FAMILY: "1"
+        CODE_SIGN_STYLE: Automatic
+    info:
+      path: EVO1300/Info.plist
+      properties:
+        CFBundleDisplayName: EVO Licht
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
+        NSBluetoothAlwaysUsageDescription: Wird benötigt, um die EVO 1300 Fahrradlampe während der Fahrt zu steuern.
+        NSBluetoothPeripheralUsageDescription: Wird benötigt, um die EVO 1300 Fahrradlampe während der Fahrt zu steuern.
+        UIBackgroundModes: [bluetooth-central]
+  EVO1300Tests:
+    type: bundle.unit-test
+    platform: iOS
+    sources: [EVO1300Tests]
+    dependencies:
+      - target: EVO1300
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+schemes:
+  EVO1300:
+    build:
+      targets:
+        EVO1300: all
+        EVO1300Tests: [test]
+    test:
+      targets: [EVO1300Tests]
