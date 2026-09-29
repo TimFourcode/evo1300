@@ -9,6 +9,7 @@ struct ContentView: View {
     @State private var profile = LampSettings.profile
     @State private var highBeamMethod = LampSettings.highBeamMethod
     @State private var channelsSwapped = LampSettings.lowBeamChannel == 1
+    @State private var saveToLamp = LampSettings.saveToLamp
     @State private var pairedName = LampSettings.pairedName
     @State private var rawHex = "DE06A400A2ED"
     @State private var lastError: String?
@@ -21,6 +22,7 @@ struct ContentView: View {
                 profileSection
                 testSection
                 beamSection
+                buttonsSection
                 rawSection
                 logSection
             }
@@ -152,6 +154,17 @@ struct ContentView: View {
             Text("Die EVO 1300 hat zwei Lichtkanäle. Mit „Nur Kanal 0“ und „Nur Kanal 1“ prüfen, welcher Kanal das Abblendlicht ist. Normal: Kanal 0 = Abblendlicht, Kanal 1 = Fernlicht. Ist es umgekehrt, „Kanäle tauschen“ einschalten.")
         }
         .disabled(manager.isBusy)
+    }
+
+    private var buttonsSection: some View {
+        Section {
+            Toggle("Modi in der Lampe speichern", isOn: $saveToLamp)
+                .onChange(of: saveToLamp) { _, newValue in LampSettings.saveToLamp = newValue }
+        } header: {
+            Text("Tasten an der Lampe")
+        } footer: {
+            Text("Eingeschaltet überschreibt jeder Befehl einen Modus in der Lampe – die Tasten an der Lampe schalten dann durch die veränderten Modi. Ausgeschaltet setzt die App das Licht nur vorübergehend. Zum Testen ausschalten und in der Übersicht die Helligkeit ändern: Reagiert die Lampe, ausgeschaltet lassen.")
+        }
     }
 
     private var rawSection: some View {

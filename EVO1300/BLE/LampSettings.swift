@@ -20,6 +20,13 @@ enum LampSettings {
         set { defaults.set(newValue.rawValue, forKey: "profile") }
     }
 
+    /// Whether A2 frames keep the save flag (0xBB) and overwrite the lamp's presets.
+    /// Off by default: saving replaces the modes the lamp's own buttons cycle through.
+    static var saveToLamp: Bool {
+        get { defaults.object(forKey: "saveToLamp") as? Bool ?? false }
+        set { defaults.set(newValue, forKey: "saveToLamp") }
+    }
+
     static var isOn: Bool {
         get { defaults.bool(forKey: "isOn") }
         set { defaults.set(newValue, forKey: "isOn") }

@@ -321,7 +321,8 @@ final class MagicshineBLEManager: NSObject {
 
         // Handshake: read-only A4/A1 queries keep the lamp from dropping the link
         // and deliver battery/temperature via notify.
-        for frame in MagicshineProtocol.telemetryRequests + frames {
+        let outputFrames = LampSettings.saveToLamp ? frames : frames.map(MagicshineProtocol.transient)
+        for frame in MagicshineProtocol.telemetryRequests + outputFrames {
             try await write(frame, to: characteristic, on: peripheral)
             try await Task.sleep(for: .milliseconds(60))
         }

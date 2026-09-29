@@ -119,6 +119,18 @@ enum MagicshineProtocol {
                                         0, 0, 0, 0, 0, 0, 0xBB])
     }
 
+    /// The official app names the last content byte of A2 frames `FLAG_SAVE` (0xBB):
+    /// with it the lamp stores the output in the preset slot, which is what the
+    /// physical mode button cycles through. This returns the same frame with the
+    /// flag cleared, so the lamp only applies it. Other frames are returned unchanged.
+    static func transient(_ frame: Data) -> Data {
+        var bytes = [UInt8](frame)
+        guard bytes.count == 20, bytes[2] == Command.output.rawValue, bytes[17] == 0xBB else { return frame }
+        bytes[17] = 0x00
+        bytes[18] = bytes[1..<18].reduce(0, ^)
+        return Data(bytes)
+    }
+
     // MARK: - High beam
 
     /// Bluetooth Light Profile control point (HORI 1300): `00` claims control,

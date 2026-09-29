@@ -82,6 +82,17 @@ struct MagicshineProtocolTests {
         }
     }
 
+    @Test func transientClearsSaveFlag() {
+        let saved = MagicshineProtocol.outputFrame(.medium, profile: .evo1300)
+        let bytes = [UInt8](MagicshineProtocol.transient(saved))
+        #expect(bytes.count == 20 && bytes[17] == 0x00 && bytes.last == 0xED)
+        #expect(bytes[1..<18].reduce(0, ^) == bytes[18])
+        #expect(Array(bytes[0..<17]) == Array([UInt8](saved)[0..<17]))
+        // Queries are left alone.
+        #expect(MagicshineProtocol.transient(MagicshineProtocol.telemetryRequests[0])
+                == MagicshineProtocol.telemetryRequests[0])
+    }
+
     @Test func parseBattery() {
         let frame = Data([0xDE, 0x13, 0xB4, 0, 0, 0, 0, 0, 0x32, 0, 0, 0, 0, 0, 0, 0, 0, 0x00, 0xED])
         #expect(MagicshineProtocol.parseBattery(frame) == 50)
